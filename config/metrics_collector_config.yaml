@@ -1,0 +1,13 @@
+# Metrics Collector Configuration
+collection_interval_sec: 2
+batch_size: 10
+log_level: INFO
+nvidia_query_fields:
+  - timestamp
+  - name
+  - utilization.gpu
+  - utilization.memory
+  - memory.total
+  - memory.used
+  - memory.free
+  - temperature.gpu

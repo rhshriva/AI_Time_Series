@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metrics-collector
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metrics-collector
+  template:
+    metadata:
+      labels:
+        app: metrics-collector
+    spec:
+      nodeSelector:
+        nvidia.com/gpu.present: "true"
+      containers:
+        - name: metrics-collector
+          image: <your-docker-repo>/metrics-collector:latest
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config/metrics_collector_config.yaml
+              subPath: metrics_collector_config.yaml
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          env:
+            - name: CONFIG_PATH
+              value: /app/config/metrics_collector_config.yaml
+      volumes:
+        - name: config-volume
+          configMap:
+            name: metrics-collector-config

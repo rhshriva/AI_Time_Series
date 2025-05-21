@@ -1,0 +1,3 @@
+# GPU Load Generator Configuration
+duration_sec: 3600
+matrix_size: 4096

@@ -1,0 +1,2 @@
+# Database Configuration
+sqlite_db_path: "tmp/gpu_metrics.db"
