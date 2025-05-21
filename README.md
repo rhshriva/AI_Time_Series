@@ -40,4 +40,4 @@ Edit files in the `config/` directory to customize collection intervals, batch s
 
 ## License
 
-Specify your license here.
+This project is licensed under the terms of the LICENSE file found in the root of this repository.
