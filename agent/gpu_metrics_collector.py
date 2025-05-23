@@ -1,3 +1,8 @@
+"""
+This module provides functions for collecting NVIDIA GPU metrics.
+
+It is not intended to be run directly, but rather to be imported and used by other scripts.
+"""
 import subprocess
 import sqlite3
 import time
@@ -81,30 +86,3 @@ def insert_metrics_batch(conn, batch):
     values = [tuple(m.get(f, None) for f in fields) for m in batch]
     c.executemany(f'''INSERT INTO gpu_metrics ({columns}) VALUES ({placeholders})''', values)
     conn.commit()
-
-def main():
-    db_config = load_db_config()
-    collector_config = load_collector_config()
-    db_path = db_config['sqlite_db_path']
-    interval = collector_config['collection_interval_sec']
-    batch_size = collector_config.get('batch_size', 10)
-    init_db(db_path)
-    conn = sqlite3.connect(db_path)
-    batch = []
-    try:
-        while True:
-            metrics = get_gpu_metrics()
-            if metrics:
-                batch.append(metrics)
-                print(f"Collected metrics at {metrics.get('timestamp', 'unknown')}")
-            if len(batch) >= batch_size:
-                insert_metrics_batch(conn, batch)
-                print(f"Inserted batch of {len(batch)} metrics.")
-                batch.clear()
-            time.sleep(interval)
-    except KeyboardInterrupt:
-        if batch:
-            insert_metrics_batch(conn, batch)
-            print(f"Inserted final batch of {len(batch)} metrics.")
-        conn.close()
-        print("Exiting and closed DB connection.")
