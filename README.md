@@ -30,9 +30,39 @@ This project provides tools for collecting, testing, and visualizing GPU metrics
    streamlit run streamlit_dashboard.py
    ```
 
-## Kubernetes Deployment
+## Docker & Kubernetes Deployment
 
-See `deployment/README.md` for instructions on containerizing and deploying the metrics collector in a Kubernetes cluster.
+### 1. Create Dockerfile
+
+A script is provided to generate a Dockerfile in the `scripts/` directory:
+
+```bash
+./create_dockerfile.sh
+```
+
+This will create a Dockerfile at `scripts/Dockerfile` suitable for building your project image.
+
+### 2. Build and Deploy to Kubernetes
+
+To build the Docker image and deploy the application to your Kubernetes cluster, use:
+
+```bash
+./deploy_k8s.sh [image_tag]
+```
+- `image_tag` is optional (default: `ai-gpu-metrics-collector:latest`).
+- This script will:
+  - Build the Docker image using the generated Dockerfile.
+  - Apply the Kubernetes manifests from the `deployment/` directory.
+
+**Note:** Ensure you have Docker and `kubectl` installed and configured for your cluster.
+
+### 3. Kubernetes Manifests
+
+Kubernetes deployment and config files are in the `deployment/` directory:
+- `metrics-collector-configmap.yaml`
+- `metrics-collector-deployment.yaml`
+
+You can customize these files as needed for your environment.
 
 ## Configuration
 
